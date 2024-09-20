@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+</head>
+<body>
+    <h1>Sign In</h1>
+    <form id="signinForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="hash_pwd">Password:</label>
+        <input type="password" id="hash_pwd" name="hash_pwd" required><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+    <div id="signinResult"></div>
+
+    <script>
+        document.getElementById('signinForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('signinResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('signinResult').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

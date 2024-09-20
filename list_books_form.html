@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Books</title>
+</head>
+<body>
+    <h1>List Books for User</h1>
+    <form id="listBooksForm">
+        <label for="userId">User ID:</label>
+        <input type="number" id="userId" name="userId" required><br><br>
+        
+        <button type="submit">List Books</button>
+    </form>
+    <div id="booksResult"></div>
+
+    <script>
+        document.getElementById('listBooksForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const userId = document.getElementById('userId').value;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/users/${userId}/books`);
+                const result = await response.json();
+                document.getElementById('booksResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('booksResult').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
